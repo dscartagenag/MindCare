@@ -1,4 +1,5 @@
 📋 Descripción
+
 MindCare es una aplicación web progresiva diseñada para apoyar el bienestar mental y emocional de los usuarios. Proporciona herramientas interactivas para el seguimiento del estado de ánimo, ejercicios de respiración guiados, journaling personal y recursos de ayuda profesional.
 ✨ Características Principales
 🏠 Dashboard Interactivo
