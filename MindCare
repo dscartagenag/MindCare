@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindCare - Tu Bienestar Mental</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: rgba(255,255,255,0.4);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .mood-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .mood-btn {
+            background: linear-gradient(145deg, #f0f8ff, #e6f3ff);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .mood-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .mood-btn.selected {
+            border-color: #667eea;
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .mood-emoji {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .breathing-exercise {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .breathing-circle {
+            width: 200px;
+            height: 200px;
+            border: 4px solid #667eea;
+            border-radius: 50%;
+            margin: 30px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #667eea;
+            transition: all 4s ease-in-out;
+        }
+
+        .breathing-circle.inhale {
+            transform: scale(1.3);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .breathing-circle.exhale {
+            transform: scale(0.8);
+            background: rgba(118, 75, 162, 0.1);
+        }
+
+        .journal-entry {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .journal-entry:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, #f8f9ff, #e8f0ff);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .resource-card {
+            background: linear-gradient(145deg, #fff, #f8f9ff);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.3s ease;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .card { padding: 20px; }
+            .breathing-circle { width: 150px; height: 150px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 MindCare</h1>
+            <p>Tu compañero para el bienestar mental</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('dashboard')">Dashboard</button>
+            <button class="tab-btn" onclick="showTab('mood')">Estado de Ánimo</button>
+            <button class="tab-btn" onclick="showTab('breathing')">Respiración</button>
+            <button class="tab-btn" onclick="showTab('journal')">Diario</button>
+            <button class="tab-btn" onclick="showTab('resources')">Recursos</button>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="card">
+                <h2>📊 Tu Bienestar Hoy</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="moodStreak">0</div>
+                        <div>Días consecutivos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="journalEntries">0</div>
+                        <div>Entradas en diario</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="breathingSessions">0</div>
+                        <div>Sesiones de respiración</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="wellnessScore">85</div>
+                        <div>Puntuación bienestar</div>
+                    </div>
+                </div>
+                
+                <h3>🎯 Progreso Semanal</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 65%"></div>
+                </div>
+                <p>Has completado 5 de 7 check-ins diarios esta semana. ¡Sigue así!</p>
+            </div>
+        </div>
+
+        <!-- Mood Tab -->
+        <div id="mood" class="tab-content">
+            <div class="card">
+                <h2>😊 ¿Cómo te sientes hoy?</h2>
+                <div class="mood-selector">
+                    <div class="mood-btn" onclick="selectMood(this, 'excelente')">
+                        <span class="mood-emoji">😄</span>
+                        <div>Excelente</div>
+                    </div>
+                    <div class="mood-btn" onclick="selectMood(this, 'bien')">
+                        <span class="mood-emoji">😊</span>
+                        <div>Bien</div>
+                    </div>
+                    <div class="mood-btn" onclick="selectMood(this, 'regular')">
+                        <span class="mood-emoji">😐</span>
+                        <div>Regular</div>
+                    </div>
+                    <div class="mood-btn" onclick="selectMood(this, 'mal')">
+                        <span class="mood-emoji">😔</span>
+                        <div>Mal</div>
+                    </div>
+                    <div class="mood-btn" onclick="selectMood(this, 'terrible')">
+                        <span class="mood-emoji">😢</span>
+                        <div>Terrible</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <label for="moodNote">¿Quieres agregar una nota sobre tu estado de ánimo?</label>
+                    <textarea id="moodNote" class="journal-entry" placeholder="Escribe qué ha influido en tu estado de ánimo hoy..." style="min-height: 100px; margin-top: 10px;"></textarea>
+                </div>
+                
+                <button class="btn-primary" onclick="saveMood()">Guardar Estado de Ánimo</button>
+            </div>
+        </div>
+
+        <!-- Breathing Tab -->
+        <div id="breathing" class="tab-content">
+            <div class="card">
+                <div class="breathing-exercise">
+                    <h2>🌬️ Ejercicio de Respiración</h2>
+                    <p>Sigue el círculo para regular tu respiración</p>
+                    
+                    <div class="breathing-circle" id="breathingCircle">
+                        <span id="breathingText">Presiona Iniciar</span>
+                    </div>
+                    
+                    <button class="btn-primary" id="breathingBtn" onclick="startBreathing()">Iniciar</button>
+                    <button class="btn-primary" onclick="stopBreathing()">Detener</button>
+                    
+                    <div style="margin-top: 20px;">
+                        <p><strong>Beneficios:</strong></p>
+                        <p>• Reduce el estrés y la ansiedad<br>
+                        • Mejora la concentración<br>
+                        • Promueve la relajación<br>
+                        • Equilibra el sistema nervioso</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Journal Tab -->
+        <div id="journal" class="tab-content">
+            <div class="card">
+                <h2>📝 Diario Personal</h2>
+                <p>Escribe tus pensamientos, sentimientos y reflexiones del día</p>
+                
+                <div style="margin: 20px 0;">
+                    <label for="journalTitle">Título de la entrada:</label>
+                    <input type="text" id="journalTitle" placeholder="Ej: Mi día de hoy, Reflexiones..." style="width: 100%; padding: 10px; margin: 10px 0; border: 2px solid #e0e0e0; border-radius: 5px;">
+                </div>
+                
+                <textarea id="journalText" class="journal-entry" placeholder="¿Qué ha pasado hoy? ¿Cómo te has sentido? ¿Qué has aprendido?
+
+Algunas ideas para empezar:
+• ¿Qué tres cosas buenas han pasado hoy?
+• ¿Qué desafíos he enfrentado?
+• ¿Por qué me siento agradecido/a?
+• ¿Qué quiero mejorar mañana?"></textarea>
+                
+                <button class="btn-primary" onclick="saveJournalEntry()">Guardar Entrada</button>
+                
+                <div id="journalEntries" style="margin-top: 30px;">
+                    <h3>Entradas Recientes</h3>
+                    <div id="entriesList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resources Tab -->
+        <div id="resources" class="tab-content">
+            <div class="card">
+                <h2>🆘 Recursos de Ayuda</h2>
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <h3>🚨 Crisis</h3>
+                        <p><strong>Línea de Crisis 24/7:</strong><br>
+                        📞 911 (Emergencias)<br>
+                        📞 1-800-273-8255 (Prevención Suicidio)</p>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <h3>🧘 Técnicas de Relajación</h3>
+                        <p>• Respiración profunda<br>
+                        • Meditación mindfulness<br>
+                        • Relajación muscular progresiva<br>
+                        • Visualización guiada</p>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <h3>💪 Autocuidado</h3>
+                        <p>• Ejercicio regular<br>
+                        • Sueño adecuado (7-9 horas)<br>
+                        • Alimentación balanceada<br>
+                        • Conexión social</p>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <h3>🌐 Recursos Online</h3>
+                        <p>• Apps de meditación<br>
+                        • Terapia online<br>
+                        • Grupos de apoyo virtuales<br>
+                        • Contenido educativo</p>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <h3>⚠️ Cuándo Buscar Ayuda</h3>
+                        <p>• Sentimientos persistentes de tristeza<br>
+                        • Ansiedad que interfiere con la vida diaria<br>
+                        • Pensamientos de autolesión<br>
+                        • Cambios drásticos en el comportamiento</p>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <h3>📚 Lecturas Recomendadas</h3>
+                        <p>• "El poder del ahora" - Eckhart Tolle<br>
+                        • "Inteligencia emocional" - Daniel Goleman<br>
+                        • "Mindfulness" - Mark Williams<br>
+                        • "La felicidad auténtica" - Martin Seligman</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let breathingInterval;
+        let isBreathing = false;
+        let currentMood = null;
+        
+        // Data storage
+        let appData = {
+            moods: [],
+            journalEntries: [],
+            breathingSessions: 0,
+            moodStreak: 0
+        };
+
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Mood functionality
+        function selectMood(element, mood) {
+            // Remove previous selection
+            const moodBtns = document.querySelectorAll('.mood-btn');
+            moodBtns.forEach(btn => btn.classList.remove('selected'));
+            
+            // Add selection to clicked element
+            element.classList.add('selected');
+            currentMood = mood;
+        }
+
+        function saveMood() {
+            if (!currentMood) {
+                alert('Por favor selecciona tu estado de ánimo');
+                return;
+            }
+            
+            const note = document.getElementById('moodNote').value;
+            const moodEntry = {
+                mood: currentMood,
+                note: note,
+                date: new Date().toLocaleDateString(),
+                timestamp: new Date().getTime()
+            };
+            
+            appData.moods.push(moodEntry);
+            updateStats();
+            
+            alert('Estado de ánimo guardado correctamente');
+            
+            // Reset form
+            document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById('moodNote').value = '';
+            currentMood = null;
+        }
+
+        // Breathing exercise
+        function startBreathing() {
+            if (isBreathing) return;
+            
+            isBreathing = true;
+            const circle = document.getElementById('breathingCircle');
+            const text = document.getElementById('breathingText');
+            let phase = 0; // 0: inhale, 1: hold, 2: exhale, 3: hold
+            
+            breathingInterval = setInterval(() => {
+                switch(phase) {
+                    case 0: // Inhale
+                        text.textContent = 'Inhala';
+                        circle.classList.remove('exhale');
+                        circle.classList.add('inhale');
+                        phase = 1;
+                        break;
+                    case 1: // Hold after inhale
+                        text.textContent = 'Mantén';
+                        setTimeout(() => { phase = 2; }, 1000);
+                        break;
+                    case 2: // Exhale
+                        text.textContent = 'Exhala';
+                        circle.classList.remove('inhale');
+                        circle.classList.add('exhale');
+                        phase = 3;
+                        break;
+                    case 3: // Hold after exhale
+                        text.textContent = 'Mantén';
+                        setTimeout(() => { phase = 0; }, 1000);
+                        break;
+                }
+            }, 4000);
+            
+            // Update session count
+            appData.breathingSessions++;
+            updateStats();
+        }
+
+        function stopBreathing() {
+            isBreathing = false;
+            clearInterval(breathingInterval);
+            
+            const circle = document.getElementById('breathingCircle');
+            const text = document.getElementById('breathingText');
+            
+            circle.classList.remove('inhale', 'exhale');
+            text.textContent = 'Presiona Iniciar';
+        }
+
+        // Journal functionality
+        function saveJournalEntry() {
+            const title = document.getElementById('journalTitle').value;
+            const text = document.getElementById('journalText').value;
+            
+            if (!title || !text) {
+                alert('Por favor completa el título y el contenido');
+                return;
+            }
+            
+            const entry = {
+                title: title,
+                content: text,
+                date: new Date().toLocaleDateString(),
+                timestamp: new Date().getTime()
+            };
+            
+            appData.journalEntries.unshift(entry);
+            updateStats();
+            displayJournalEntries();
+            
+            // Clear form
+            document.getElementById('journalTitle').value = '';
+            document.getElementById('journalText').value = '';
+            
+            alert('Entrada guardada correctamente');
+        }
+
+        function displayJournalEntries() {
+            const entriesList = document.getElementById('entriesList');
+            entriesList.innerHTML = '';
+            
+            appData.journalEntries.slice(0, 5).forEach(entry => {
+                const entryDiv = document.createElement('div');
+                entryDiv.style.cssText = `
+                    background: #f8f9ff;
+                    padding: 15px;
+                    margin: 10px 0;
+                    border-radius: 10px;
+                    border-left: 4px solid #667eea;
+                `;
+                
+                entryDiv.innerHTML = `
+                    <h4>${entry.title}</h4>
+                    <p style="color: #666; font-size: 0.9em; margin: 5px 0;">${entry.date}</p>
+                    <p>${entry.content.substring(0, 150)}${entry.content.length > 150 ? '...' : ''}</p>
+                `;
+                
+                entriesList.appendChild(entryDiv);
+            });
+        }
+
+        // Update statistics
+        function updateStats() {
+            document.getElementById('moodStreak').textContent = appData.moods.length;
+            document.getElementById('journalEntries').textContent = appData.journalEntries.length;
+            document.getElementById('breathingSessions').textContent = appData.breathingSessions;
+        }
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            displayJournalEntries();
+            
+            // Add welcome message
+            setTimeout(() => {
+                if (appData.journalEntries.length === 0 && appData.moods.length === 0) {
+                    alert('¡Bienvenido a MindCare! 🧠\n\nComienza registrando tu estado de ánimo o escribiendo en tu diario personal.');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
