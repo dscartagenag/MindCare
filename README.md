@@ -51,7 +51,9 @@ Clonar el Repositorio
 bashgit clone https://github.com/tu-usuario/mindcare-app.git
 cd mindcare-app
 Ejecutar Localmente
-bash# Opción 1: Abrir directamente
+bash# 
+
+# Opción 1: Abrir directamente
 open index.html
 
 # Opción 2: Servidor local con Python
